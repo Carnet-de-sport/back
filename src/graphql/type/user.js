@@ -11,10 +11,17 @@ const UserType = new GraphQLObjectType({
     id: { type: GraphQLID },
     username: { type: GraphQLString },
     email: { type: GraphQLString },
-    exercises: { type: GraphQLList(ExerciseType) },
-    programs: { type: GraphQLList(ProgramType) },
-    sharedWithMe: { type: new GraphQLList(GraphQLID) },
+    exercises: { type: new GraphQLList(GraphQLID) }, // liste d’IDs d’exos
+    programs: { type: new GraphQLList(GraphQLID) }, // liste d’IDs de programmes
+    sharedWithMe: { type: new GraphQLList(GraphQLID) }, // liste d’IDs partagés
   }),
 });
 
-module.exports = UserType;
+const AuthPayloadType = new GraphQLObjectType({
+  name: "AuthPayload",
+  fields: () => ({
+    token: { type: GraphQLString },
+  }),
+});
+
+module.exports = { UserType, AuthPayloadType };
