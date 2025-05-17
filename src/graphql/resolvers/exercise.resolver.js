@@ -32,4 +32,19 @@ const getExercises = async ({ userId }) => {
   return Exercise.find({ userId });
 };
 
-module.exports = { addExercise, updateExercise, deleteExercise, getExercises };
+const shareExercise = async ({ exerciseId, userIdToShare }) => {
+  const exercise = await Exercise.findByIdAndUpdate(
+    exerciseId,
+    { $addToSet: { sharedWith: userIdToShare }, updatedAt: new Date() },
+    { new: true }
+  );
+  return exercise;
+};
+
+module.exports = {
+  addExercise,
+  updateExercise,
+  deleteExercise,
+  getExercises,
+  shareExercise,
+};

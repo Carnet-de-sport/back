@@ -94,6 +94,14 @@ const Mutation = new GraphQLObjectType({
       },
       resolve: async (parent, args) => exerciseResolver.deleteExercise(args),
     },
+    shareExercise: {
+      type: ExerciseType,
+      args: {
+        exerciseId: { type: GraphQLID },
+        userIdToShare: { type: GraphQLID },
+      },
+      resolve: async (parent, args) => exerciseResolver.shareExercise(args),
+    },
 
     // PROGRAM CRUD
     addProgram: {
@@ -124,6 +132,14 @@ const Mutation = new GraphQLObjectType({
         userId: { type: GraphQLID },
       },
       resolve: async (parent, args) => programResolver.deleteProgram(args),
+    },
+    shareProgram: {
+      type: ProgramType,
+      args: {
+        programId: { type: GraphQLID },
+        userIdToShare: { type: GraphQLID },
+      },
+      resolve: async (parent, args) => programResolver.shareProgram(args),
     },
   },
 });

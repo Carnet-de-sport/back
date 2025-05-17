@@ -25,4 +25,19 @@ const getPrograms = async ({ userId }) => {
   return Program.find({ userId });
 };
 
-module.exports = { addProgram, updateProgram, deleteProgram, getPrograms };
+const shareProgram = async ({ programId, userIdToShare }) => {
+  const program = await Program.findByIdAndUpdate(
+    programId,
+    { $addToSet: { sharedWith: userIdToShare }, updatedAt: new Date() },
+    { new: true }
+  );
+  return program;
+};
+
+module.exports = {
+  addProgram,
+  updateProgram,
+  deleteProgram,
+  getPrograms,
+  shareProgram,
+};

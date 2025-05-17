@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js",
+    "lint": "eslint .",
+    "test": "echo \"No test specified yet\" && exit 0",
+    "echo": "echo 'Carnet de sport backend prêt !'"
   },
   "repository": {
     "type": "git",
@@ -27,5 +31,11 @@
     "graphql": "^15.10.1",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.15.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.27.0",
+    "eslint": "^9.27.0",
+    "globals": "^16.1.0",
+    "nodemon": "^3.1.10"
   }
 }
