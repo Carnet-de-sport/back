@@ -1,31 +1,43 @@
-const Program = require("../../models/Program");
+const { Program } = require("../../models/Program");
 
-// Création d'un programme
-const addProgram = async ({ userId, name, description, exercises }) => {
-  const program = new Program({ userId, name, description, exercises });
+const addProgram = async ({ name, description, exercises }, context) => {
+  if (!context.user) throw new Error("Non autorisé !");
+  const program = new Program({
+    userId: context.user.userId,
+    name,
+    description,
+    exercises,
+  });
   await program.save();
   return program;
 };
 
-const updateProgram = async ({ id, userId, name, description, exercises }) => {
+const updateProgram = async ({ id, name, description, exercises }, context) => {
+  if (!context.user) throw new Error("Non autorisé !");
   const program = await Program.findOneAndUpdate(
-    { _id: id, userId },
+    { _id: id, userId: context.user.userId },
     { name, description, exercises, updatedAt: new Date() },
     { new: true }
   );
   return program;
 };
 
-const deleteProgram = async ({ id, userId }) => {
-  const program = await Program.findOneAndDelete({ _id: id, userId });
+const deleteProgram = async ({ id }, context) => {
+  if (!context.user) throw new Error("Non autorisé !");
+  const program = await Program.findOneAndDelete({
+    _id: id,
+    userId: context.user.userId,
+  });
   return program;
 };
 
-const getPrograms = async ({ userId }) => {
-  return Program.find({ userId });
+const getPrograms = async (_, context) => {
+  if (!context.user) throw new Error("Non autorisé !");
+  return Program.find({ userId: context.user.userId });
 };
 
-const shareProgram = async ({ programId, userIdToShare }) => {
+const shareProgram = async ({ programId, userIdToShare }, context) => {
+  if (!context.user) throw new Error("Non autorisé !");
   const program = await Program.findByIdAndUpdate(
     programId,
     { $addToSet: { sharedWith: userIdToShare }, updatedAt: new Date() },

@@ -4,6 +4,9 @@ const {
   GraphQLString,
   GraphQLList,
   GraphQLID,
+  GraphQLInputObjectType,
+  GraphQLInt,
+  GraphQLFloat,
 } = require("graphql");
 
 const { UserType, AuthPayloadType } = require("./type/user");
@@ -14,38 +17,18 @@ const userResolver = require("./resolvers/user.resolver");
 const exerciseResolver = require("./resolvers/exercise.resolver");
 const programResolver = require("./resolvers/program.resolver");
 
-const { EXERCISE_TYPES, MUSCLE_GROUPS } = require("../models/exercise");
-
 const RootQuery = new GraphQLObjectType({
   name: "RootQueryType",
   fields: {
-    hello: {
-      type: GraphQLString,
-      resolve: () => "Hello World!",
-    },
-
     myExercises: {
       type: new GraphQLList(ExerciseType),
-      args: {
-        userId: { type: GraphQLID },
-      },
-      resolve: async (parent, args) => exerciseResolver.getExercises(args),
+      resolve: (parent, args, context) =>
+        exerciseResolver.getExercises(args, context),
     },
-
     myPrograms: {
       type: new GraphQLList(ProgramType),
-      args: {
-        userId: { type: GraphQLID },
-      },
-      resolve: async (parent, args) => programResolver.getPrograms(args),
-    },
-    exerciseTypes: {
-      type: new GraphQLList(GraphQLString),
-      resolve: () => EXERCISE_TYPES,
-    },
-    muscleGroups: {
-      type: new GraphQLList(GraphQLString),
-      resolve: () => MUSCLE_GROUPS,
+      resolve: (parent, args, context) =>
+        programResolver.getPrograms(args, context),
     },
   },
 });
@@ -53,7 +36,6 @@ const RootQuery = new GraphQLObjectType({
 const Mutation = new GraphQLObjectType({
   name: "Mutation",
   fields: {
-    // AUTH
     register: {
       type: UserType,
       args: {
@@ -61,7 +43,7 @@ const Mutation = new GraphQLObjectType({
         email: { type: GraphQLString },
         password: { type: GraphQLString },
       },
-      resolve: async (parent, args) => userResolver.register(args),
+      resolve: (parent, args, context) => userResolver.register(args, context),
     },
     login: {
       type: AuthPayloadType,
@@ -69,87 +51,71 @@ const Mutation = new GraphQLObjectType({
         username: { type: GraphQLString },
         password: { type: GraphQLString },
       },
-      resolve: async (parent, args) => userResolver.login(args),
+      resolve: (parent, args, context) => userResolver.login(args, context),
     },
 
     // EXERCISE CRUD
     addExercise: {
       type: ExerciseType,
       args: {
-        userId: { type: GraphQLID },
         name: { type: GraphQLString },
         description: { type: GraphQLString },
         muscles: { type: new GraphQLList(GraphQLString) },
         type: { type: GraphQLString },
       },
-      resolve: async (parent, args) => exerciseResolver.addExercise(args),
+      resolve: (parent, args, context) =>
+        exerciseResolver.addExercise(args, context),
     },
     updateExercise: {
       type: ExerciseType,
       args: {
         id: { type: GraphQLID },
-        userId: { type: GraphQLID },
         name: { type: GraphQLString },
         description: { type: GraphQLString },
         muscles: { type: new GraphQLList(GraphQLString) },
         type: { type: GraphQLString },
       },
-      resolve: async (parent, args) => exerciseResolver.updateExercise(args),
+      resolve: (parent, args, context) =>
+        exerciseResolver.updateExercise(args, context),
     },
     deleteExercise: {
       type: ExerciseType,
       args: {
         id: { type: GraphQLID },
-        userId: { type: GraphQLID },
       },
-      resolve: async (parent, args) => exerciseResolver.deleteExercise(args),
-    },
-    shareExercise: {
-      type: ExerciseType,
-      args: {
-        exerciseId: { type: GraphQLID },
-        userIdToShare: { type: GraphQLID },
-      },
-      resolve: async (parent, args) => exerciseResolver.shareExercise(args),
+      resolve: (parent, args, context) =>
+        exerciseResolver.deleteExercise(args, context),
     },
 
     // PROGRAM CRUD
     addProgram: {
       type: ProgramType,
       args: {
-        userId: { type: GraphQLID },
         name: { type: GraphQLString },
         description: { type: GraphQLString },
         exercises: { type: new GraphQLList(ProgramExerciseInputType) },
       },
-      resolve: async (parent, args) => programResolver.addProgram(args),
+      resolve: (parent, args, context) =>
+        programResolver.addProgram(args, context),
     },
     updateProgram: {
       type: ProgramType,
       args: {
         id: { type: GraphQLID },
-        userId: { type: GraphQLID },
         name: { type: GraphQLString },
         description: { type: GraphQLString },
         exercises: { type: new GraphQLList(ProgramExerciseInputType) },
       },
-      resolve: async (parent, args) => programResolver.updateProgram(args),
+      resolve: (parent, args, context) =>
+        programResolver.updateProgram(args, context),
     },
     deleteProgram: {
       type: ProgramType,
       args: {
         id: { type: GraphQLID },
-        userId: { type: GraphQLID },
       },
-      resolve: async (parent, args) => programResolver.deleteProgram(args),
-    },
-    shareProgram: {
-      type: ProgramType,
-      args: {
-        programId: { type: GraphQLID },
-        userIdToShare: { type: GraphQLID },
-      },
-      resolve: async (parent, args) => programResolver.shareProgram(args),
+      resolve: (parent, args, context) =>
+        programResolver.deleteProgram(args, context),
     },
   },
 });
