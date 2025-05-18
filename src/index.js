@@ -9,8 +9,8 @@ const jwtAuth = require("./middleware/auth");
 const app = express();
 
 app.use(cors());
+app.use(express.json());
 
-// --- Connexion à MongoDB ---
 mongoose
   .connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
