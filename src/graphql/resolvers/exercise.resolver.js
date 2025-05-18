@@ -1,4 +1,4 @@
-const Exercise = require("../../models/Exercise");
+const { Exercise } = require("../../models/Exercise");
 
 // Création d'un exercice
 const addExercise = async ({ userId, name, description, muscles, type }) => {
