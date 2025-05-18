@@ -14,6 +14,8 @@ const userResolver = require("./resolvers/user.resolver");
 const exerciseResolver = require("./resolvers/exercise.resolver");
 const programResolver = require("./resolvers/program.resolver");
 
+const { EXERCISE_TYPES, MUSCLE_GROUPS } = require("../models/exercise");
+
 const RootQuery = new GraphQLObjectType({
   name: "RootQueryType",
   fields: {
@@ -36,6 +38,14 @@ const RootQuery = new GraphQLObjectType({
         userId: { type: GraphQLID },
       },
       resolve: async (parent, args) => programResolver.getPrograms(args),
+    },
+    exerciseTypes: {
+      type: new GraphQLList(GraphQLString),
+      resolve: () => EXERCISE_TYPES,
+    },
+    muscleGroups: {
+      type: new GraphQLList(GraphQLString),
+      resolve: () => MUSCLE_GROUPS,
     },
   },
 });

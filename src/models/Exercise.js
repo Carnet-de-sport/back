@@ -27,11 +27,21 @@ const ExerciseSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   name: { type: String, required: true },
   description: String,
-  muscles: [{ type: String, enum: MUSCLE_GROUPS }], // <-- Menu déroulant/array limité aux valeurs
+  muscles: [{ type: String, enum: MUSCLE_GROUPS }],
   type: { type: String, enum: EXERCISE_TYPES },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
   sharedWith: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 });
 
-module.exports = mongoose.model("Exercise", ExerciseSchema);
+const modelName = "Exercise";
+// Empêche l’erreur OverwriteModelError :
+const Exercise = mongoose.models[modelName]
+  ? mongoose.model(modelName)
+  : mongoose.model(modelName, ExerciseSchema);
+
+module.exports = {
+  Exercise,
+  EXERCISE_TYPES,
+  MUSCLE_GROUPS,
+};
