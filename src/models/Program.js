@@ -16,5 +16,8 @@ const ProgramSchema = new mongoose.Schema({
   updatedAt: { type: Date, default: Date.now },
   sharedWith: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 });
+const modelName = "Program";
+const Program =
+  mongoose.models[modelName] || mongoose.model(modelName, ProgramSchema);
 
-module.exports = mongoose.model("Program", ProgramSchema);
+module.exports = { Program };
