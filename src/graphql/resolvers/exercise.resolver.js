@@ -1,4 +1,5 @@
 const { Exercise } = require("../../models/exercise");
+const User = require("../../models/user");
 
 const addExercise = async ({ name, description, muscles, type }, context) => {
   if (!context.user) throw new Error("Non autorisé !");
@@ -42,8 +43,11 @@ const getExercises = async (_, context) => {
   });
 };
 
-const shareExercise = async ({ exerciseId, userIdToShare }, context) => {
+const shareExercise = async ({ exerciseId, usernameToShare }, context) => {
   if (!context.user) throw new Error("Non autorisé !");
+
+  const userToShare = await User.findOne({ username: usernameToShare });
+  if (!userToShare) throw new Error("User not found");
   const exercise = await Exercise.findByIdAndUpdate(
     exerciseId,
     { $addToSet: { sharedWith: userIdToShare }, updatedAt: new Date() },

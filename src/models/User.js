@@ -9,4 +9,4 @@ const UserSchema = new mongoose.Schema({
   sharedWithMe: [{ type: mongoose.Schema.Types.ObjectId, ref: "Program" }],
 });
 
-module.exports = mongoose.model("User", UserSchema);
+module.exports = mongoose.models.User || mongoose.model("User", UserSchema);

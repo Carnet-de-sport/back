@@ -1,4 +1,5 @@
 const { Program } = require("../../models/Program");
+const User = require("../../models/user");
 
 const addProgram = async ({ name, description, exercises }, context) => {
   if (!context.user) throw new Error("Non autorisé !");
@@ -38,8 +39,11 @@ const getPrograms = async (_, context) => {
   });
 };
 
-const shareProgram = async ({ programId, userIdToShare }, context) => {
+const shareProgram = async ({ programId, usernameToShare }, context) => {
   if (!context.user) throw new Error("Non autorisé !");
+
+  const userToShare = await User.findOne({ username: usernameToShare });
+  if (!userToShare) throw new Error("User not found");
   const program = await Program.findByIdAndUpdate(
     programId,
     { $addToSet: { sharedWith: userIdToShare }, updatedAt: new Date() },

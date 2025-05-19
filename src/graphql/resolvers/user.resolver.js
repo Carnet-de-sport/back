@@ -26,5 +26,8 @@ const login = async ({ username, password }) => {
   );
   return { token };
 };
+const userByUsername = async (_, { username }) => {
+  return await User.findOne({ username });
+};
 
-module.exports = { register, login };
+module.exports = { register, login, userByUsername };
