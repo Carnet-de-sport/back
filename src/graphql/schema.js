@@ -16,7 +16,7 @@ const { ProgramType, ProgramExerciseInputType } = require("./type/program");
 const userResolver = require("./resolvers/user.resolver");
 const exerciseResolver = require("./resolvers/exercise.resolver");
 const programResolver = require("./resolvers/program.resolver");
-const { EXERCISE_TYPES, MUSCLE_GROUPS } = require("../models/exercise");
+const { EXERCISE_TYPES, MUSCLE_GROUPS } = require("../models/Exercise");
 
 const RootQuery = new GraphQLObjectType({
   name: "RootQueryType",

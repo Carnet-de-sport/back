@@ -1,4 +1,4 @@
-const { Exercise } = require("../../models/Exercise");
+const { Exercise } = require("../../models/exercise");
 
 const addExercise = async ({ name, description, muscles, type }, context) => {
   if (!context.user) throw new Error("Non autorisé !");
