@@ -33,7 +33,9 @@ const deleteProgram = async ({ id }, context) => {
 
 const getPrograms = async (_, context) => {
   if (!context.user) throw new Error("Non autorisé !");
-  return Program.find({ userId: context.user.userId });
+  return Program.find({
+    $or: [{ userId: context.user.userId }, { sharedWith: context.user.userId }],
+  });
 };
 
 const shareProgram = async ({ programId, userIdToShare }, context) => {

@@ -37,7 +37,9 @@ const deleteExercise = async ({ id }, context) => {
 
 const getExercises = async (_, context) => {
   if (!context.user) throw new Error("Non autorisé !");
-  return Exercise.find({ userId: context.user.userId });
+  return Exercise.find({
+    $or: [{ userId: context.user.userId }, { sharedWith: context.user.userId }],
+  });
 };
 
 const shareExercise = async ({ exerciseId, userIdToShare }, context) => {
