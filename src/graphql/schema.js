@@ -126,6 +126,24 @@ const Mutation = new GraphQLObjectType({
       resolve: (parent, args, context) =>
         programResolver.deleteProgram(args, context),
     },
+    shareExercise: {
+      type: ExerciseType,
+      args: {
+        exerciseId: { type: GraphQLID },
+        userIdToShare: { type: GraphQLID },
+      },
+      resolve: (parent, args, context) =>
+        exerciseResolver.shareExercise(args, context),
+    },
+    shareProgram: {
+      type: ProgramType,
+      args: {
+        programId: { type: GraphQLID },
+        userIdToShare: { type: GraphQLID },
+      },
+      resolve: (parent, args, context) =>
+        programResolver.shareProgram(args, context),
+    },
   },
 });
 
