@@ -1,4 +1,4 @@
-const { Program } = require("../../models/Program");
+const { Program } = require("../../models/program");
 const User = require("../../models/user");
 
 const addProgram = async ({ name, description, exercises }, context) => {

@@ -39,6 +39,12 @@ const RootQuery = new GraphQLObjectType({
       type: new GraphQLList(GraphQLString),
       resolve: () => MUSCLE_GROUPS,
     },
+    userByUsername: {
+      type: UserType,
+      args: { username: { type: GraphQLString } },
+      resolve: (parent, { username }) =>
+        userResolver.userByUsername({ username }),
+    },
   },
 });
 
@@ -130,7 +136,7 @@ const Mutation = new GraphQLObjectType({
       type: ExerciseType,
       args: {
         exerciseId: { type: GraphQLID },
-        userIdToShare: { type: GraphQLID },
+        usernameToShare: { type: GraphQLID },
       },
       resolve: (parent, args, context) =>
         exerciseResolver.shareExercise(args, context),
@@ -139,7 +145,7 @@ const Mutation = new GraphQLObjectType({
       type: ProgramType,
       args: {
         programId: { type: GraphQLID },
-        userIdToShare: { type: GraphQLID },
+        usernameToShare: { type: GraphQLID },
       },
       resolve: (parent, args, context) =>
         programResolver.shareProgram(args, context),
