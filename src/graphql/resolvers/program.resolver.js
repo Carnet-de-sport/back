@@ -1,5 +1,5 @@
 const { Program } = require("../../models/program");
-const User = require("../../models/user");
+const { User } = require("../../models/user");
 
 const addProgram = async ({ name, description, exercises }, context) => {
   if (!context.user) throw new Error("Non autorisé !");
